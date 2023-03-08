@@ -22,6 +22,7 @@ function App() {
         id:uuid(),
         title:title,
         body:body,
+		focused: true
       }
       setTopic([...topics,topic]);
       setId(topic.id);
@@ -39,9 +40,9 @@ function App() {
 
   
   const [topics, setTopic] =useState([
-    {id: uuid(), title:"html", body:"html is ,,,"},
-    {id: uuid(), title:"css", body:"css is ,,,"},
-    {id: uuid(), title:"js", body:"js is ,,,"},
+    {id: uuid(), title:"html", body:"html is ,,,", focused: false},
+    {id: uuid(), title:"css", body:"css is ,,,", focused: false},
+    {id: uuid(), title:"js", body:"js is ,,,", focused: false},
   ]);
 
 
@@ -104,7 +105,12 @@ function App() {
     </head>
     <body>
       <Header title="WEB" onChangeMode={()=>{setMode('WELCOME');}}></Header>
-      <Nav topics={topics} onChangeMode={(_id)=>{setId(_id); setMode('READ');}}></Nav>
+      <Nav topics={topics} id={id} onChangeMode={(id)=>{
+				setId(id); 
+				setTopic(topics&&topics.map((topic)=>
+				topic.id===id ? {...topic,focused:true}:{...topic,focused:false}))
+				setMode('READ');
+			}}></Nav>
       {content}
       <ul>
         <li><a href='/create' onClick={(e)=>{
